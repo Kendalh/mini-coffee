@@ -14,6 +14,7 @@ export interface CoffeeBean {
   price_per_pkg: number | null;
   processing_method: string;
   provider: string;
+  sold_out: boolean;
   type: string;
   variety: string;
 }

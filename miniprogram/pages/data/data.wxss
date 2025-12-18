@@ -68,14 +68,14 @@
   background-color: #f0f0f0;
   font-weight: bold;
   padding: 20rpx 0;
-  min-width: 1200rpx; /* 根据列数调整 */
+  min-width: 1400rpx; /* 根据列数调整 - added status column */
 }
 
 .table-row {
   display: flex;
   padding: 20rpx 0;
   border-bottom: 1rpx solid #eee;
-  min-width: 1200rpx; /* 与表头保持一致 */
+  min-width: 1400rpx; /* 与表头保持一致 - added status column */
   transition: background-color 0.3s;
 }
 
@@ -123,6 +123,10 @@
 }
 
 .harvest {
+  flex: 1;
+}
+
+.status {
   flex: 1;
 }
 

@@ -27,6 +27,7 @@
         <text class="table-cell grade">等级</text>
         <text class="table-cell type">类型</text>
         <text class="table-cell price">价格(元/kg)</text>
+        <text class="table-cell status">状态</text>
       </view>
       
       <view wx:if="{{loading}}" class="loading">
@@ -41,6 +42,7 @@
           <text class="table-cell grade">{{item.grade}}</text>
           <text class="table-cell type">{{item.type === 'premium' ? '精品' : '商业'}}</text>
           <text class="table-cell price">{{item.price_per_kg ? item.price_per_kg : '暂无'}}</text>
+          <text class="table-cell status">{{item.sold_out ? '售罄' : '有货'}}</text>
         </view>
       </view>
     </view>
@@ -97,6 +99,10 @@
         <view class="detail-item">
           <text class="label">价格:</text>
           <text class="value">{{selectedBean.price_per_kg ? selectedBean.price_per_kg + ' 元/kg' : '暂无'}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">状态:</text>
+          <text class="value">{{selectedBean.sold_out ? '售罄' : '有货'}}</text>
         </view>
         <view class="detail-item">
           <text class="label">密度:</text>
