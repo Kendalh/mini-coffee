@@ -15,6 +15,12 @@
           豆类: {{selectedTypeLabel || '全部'}}
         </view>
       </picker>
+      
+      <picker class="filter-picker" bindchange="onFlavorChange" range="{{flavorRange}}">
+        <view class="filter-label">
+          风味: {{selectedFlavorLabel || '全部'}}
+        </view>
+      </picker>
     </view>
   </view>
   
@@ -23,6 +29,7 @@
       <view class="table-header">
         <text class="table-cell name">名称</text>
         <text class="table-cell country">国家</text>
+        <text class="table-cell flavor-category">风味分类</text>
         <text class="table-cell origin">产地</text>
         <text class="table-cell grade">等级</text>
         <text class="table-cell type">类型</text>
@@ -38,6 +45,7 @@
         <view wx:for="{{coffeeBeans}}" wx:key="code" class="table-row" bindtap="onRowClick" data-item="{{item}}">
           <text class="table-cell name">{{item.name}}</text>
           <text class="table-cell country">{{item.country}}</text>
+          <text class="table-cell flavor-category">{{item.flavor_category}}</text>
           <text class="table-cell origin">{{item.origin}}</text>
           <text class="table-cell grade">{{item.grade}}</text>
           <text class="table-cell type">{{item.type === 'premium' ? '精品' : '商业'}}</text>
@@ -131,6 +139,18 @@
         <view class="detail-item">
           <text class="label">收获季节:</text>
           <text class="value">{{selectedBean.harvest_season}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">风味分类:</text>
+          <text class="value">{{selectedBean.flavor_category}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">地块:</text>
+          <text class="value">{{selectedBean.plot}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">庄园:</text>
+          <text class="value">{{selectedBean.estate}}</text>
         </view>
       </view>
     </view>

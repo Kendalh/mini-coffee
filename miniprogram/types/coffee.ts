@@ -5,11 +5,14 @@ export interface CoffeeBean {
   data_month: number;
   data_year: number;
   density: string;
+  estate: string;
+  flavor_category: string;
   flavor_profile: string;
   grade: string;
   harvest_season: number;
   name: string;
   origin: string;
+  plot: string;
   price_per_kg: number | null;
   price_per_pkg: number | null;
   processing_method: string;

@@ -1,4 +1,4 @@
-import { getCoffeeBeans, getCountries } from '../../services/coffee-service';
+import { getCoffeeBeans, getCountries, getFlavorCategories } from '../../services/coffee-service';
 import { CoffeeBean, Pagination } from '../../types/coffee';
 
 Component({
@@ -12,10 +12,13 @@ Component({
     countries: [] as string[],
     countryRange: ['全部'] as string[], // Full range for picker
     typeRange: ['全部', '商业豆', '精品豆'], // Full range for picker
+    flavorRange: ['全部'] as string[], // Full range for flavor picker
     selectedCountry: '',
     selectedType: '',
+    selectedFlavor: '',
     selectedCountryLabel: '',
-    selectedTypeLabel: ''
+    selectedTypeLabel: '',
+    selectedFlavorLabel: ''
   },
   lifetimes: {
     attached() {
@@ -26,42 +29,57 @@ Component({
   methods: {
     async loadFilters() {
       try {
+        // Load countries
         const countries = await getCountries();
         console.log('Loaded countries:', countries);
         console.log('Number of countries:', countries.length);
         
-        // Create the full range for the picker
+        // Create the full range for the country picker
         const countryRange = ['全部'].concat(countries);
         console.log('Country range for picker:', countryRange);
         
+        // Load flavor categories
+        const flavors = await getFlavorCategories();
+        console.log('Loaded flavors:', flavors);
+        console.log('Number of flavors:', flavors.length);
+        
+        // Create the full range for the flavor picker
+        const flavorRange = ['全部'].concat(flavors);
+        console.log('Flavor range for picker:', flavorRange);
+        
         this.setData({
           countries: countries,
-          countryRange: countryRange
+          countryRange: countryRange,
+          flavorRange: flavorRange
         }, () => {
           console.log('Countries set in data:', this.data.countries);
           console.log('Country range set in data:', this.data.countryRange);
+          console.log('Flavor range set in data:', this.data.flavorRange);
         });
       } catch (error) {
-        console.error('Failed to load countries:', error);
+        console.error('Failed to load filters:', error);
         wx.showToast({
-          title: '国家列表加载失败',
+          title: '筛选条件加载失败',
           icon: 'none'
         });
       }
     },
     
     async loadData() {
-      const { currentPage, selectedCountry, selectedType } = this.data;
-      console.log('Loading data with filters - Country:', selectedCountry, 'Type:', selectedType);
+      const { currentPage, selectedCountry, selectedType, selectedFlavor } = this.data;
+      console.log('Loading data with filters - Country:', selectedCountry, 'Type:', selectedType, 'Flavor:', selectedFlavor);
       this.setData({ loading: true });
       
       // 构建过滤条件
-      const filters: { country?: string; type?: string } = {};
+      const filters: { country?: string; type?: string; flavor_category?: string } = {};
       if (selectedCountry) {
         filters.country = selectedCountry;
       }
       if (selectedType) {
         filters.type = selectedType;
+      }
+      if (selectedFlavor) {
+        filters.flavor_category = selectedFlavor;
       }
       
       try {
@@ -181,6 +199,37 @@ Component({
       this.setData({
         currentPage: page
       }, () => {
+        this.loadData();
+      });
+    },
+    
+    onFlavorChange(e: any) {
+      console.log('Flavor change event:', e);
+      const selectedIndex = e.detail.value;
+      console.log('Selected flavor index from picker:', selectedIndex);
+      
+      // Get the actual value from the range array
+      const selectedValue = this.data.flavorRange[selectedIndex];
+      console.log('Selected flavor value:', selectedValue);
+      
+      // Handle "全部" selection
+      if (selectedValue === '全部') {
+        this.setData({
+          selectedFlavor: '',
+          selectedFlavorLabel: '全部'
+        }, () => {
+          this.loadData();
+        });
+        return;
+      }
+      
+      // Set both the actual value (for API) and display value
+      this.setData({
+        selectedFlavor: selectedValue,
+        selectedFlavorLabel: selectedValue,
+        currentPage: 1
+      }, () => {
+        console.log('Updated selected flavor in data:', this.data.selectedFlavor);
         this.loadData();
       });
     },

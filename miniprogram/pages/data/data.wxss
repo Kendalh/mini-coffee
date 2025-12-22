@@ -68,14 +68,14 @@
   background-color: #f0f0f0;
   font-weight: bold;
   padding: 20rpx 0;
-  min-width: 1400rpx; /* 根据列数调整 - added status column */
+  min-width: 1600rpx; /* 根据列数调整 - added flavor-category and status columns */
 }
 
 .table-row {
   display: flex;
   padding: 20rpx 0;
   border-bottom: 1rpx solid #eee;
-  min-width: 1400rpx; /* 与表头保持一致 - added status column */
+  min-width: 1600rpx; /* 与表头保持一致 - added flavor-category and status columns */
   transition: background-color 0.3s;
 }
 
@@ -127,6 +127,10 @@
 }
 
 .status {
+  flex: 1;
+}
+
+.flavor-category {
   flex: 1;
 }
 

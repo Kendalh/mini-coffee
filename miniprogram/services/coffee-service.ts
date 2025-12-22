@@ -25,10 +25,10 @@ const API_BASE_URL = getApiBaseUrl();
 /**
  * 获取咖啡豆数据
  * @param page 页码，默认为1
- * @param filters 过滤条件，包括国家和类型
+ * @param filters 过滤条件，包括国家、类型和风味分类
  * @returns Promise<CoffeeBeansResponse>
  */
-export const getCoffeeBeans = async (page: number = 1, filters: { country?: string; type?: string } = {}): Promise<CoffeeBeansResponse> => {
+export const getCoffeeBeans = async (page: number = 1, filters: { country?: string; type?: string; flavor_category?: string } = {}): Promise<CoffeeBeansResponse> => {
   return new Promise((resolve, reject) => {
     // 构建查询参数
     const data: any = {
@@ -43,6 +43,10 @@ export const getCoffeeBeans = async (page: number = 1, filters: { country?: stri
     
     if (filters.type) {
       data.type = filters.type;
+    }
+    
+    if (filters.flavor_category) {
+      data.flavor_category = filters.flavor_category;
     }
     
     console.log('Making request to coffee-beans API with params:', data);
@@ -61,6 +65,33 @@ export const getCoffeeBeans = async (page: number = 1, filters: { country?: stri
       },
       fail: (err: any) => {
         console.error('Coffee beans API request failed:', err);
+        reject(new Error(`Network error: ${err.errMsg}`));
+      }
+    });
+  });
+};
+
+/**
+ * 获取所有风味分类列表
+ * @returns Promise<string[]>
+ */
+export const getFlavorCategories = async (): Promise<string[]> => {
+  return new Promise((resolve, reject) => {
+    console.log('Making request to flavor categories API');
+    
+    wx.request({
+      url: `${API_BASE_URL}/api/filters/flavor-categories`,
+      method: 'GET',
+      success: (res: any) => {
+        console.log('Flavor categories API response:', res);
+        if (res.statusCode === 200) {
+          resolve(res.data as string[]);
+        } else {
+          reject(new Error(`HTTP ${res.statusCode}: ${res.errMsg}`));
+        }
+      },
+      fail: (err: any) => {
+        console.error('Flavor categories API request failed:', err);
         reject(new Error(`Network error: ${err.errMsg}`));
       }
     });
