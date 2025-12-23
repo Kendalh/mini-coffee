@@ -8,7 +8,6 @@ Component({
     currentPage: 1,
     loading: false,
     selectedBean: null as CoffeeBean | null,
-    showModal: false,
     countries: [] as string[],
     countryRange: ['全部'] as string[], // Full range for picker
     typeRange: ['全部', '商业豆', '精品豆'], // Full range for picker
@@ -236,20 +235,14 @@ Component({
     
     onRowClick(e: any) {
       const item = e.currentTarget.dataset.item;
-      this.setData({
-        selectedBean: item,
-        showModal: true
+      // Navigate to the coffee detail page instead of showing modal
+      wx.navigateTo({
+        url: `../coffee-detail/coffee-detail?bean=${encodeURIComponent(JSON.stringify(item))}`
       });
     },
     
     stopPropagation(e: any) {
       // 阻止事件冒泡
-    },
-    
-    onCloseModal() {
-      this.setData({
-        showModal: false
-      });
     }
   }
 })

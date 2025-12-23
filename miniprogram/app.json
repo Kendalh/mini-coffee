@@ -2,10 +2,10 @@
   "pages": [
     "pages/index/index",
     "pages/data/data",
-    "pages/tools/tools",
     "pages/cart/cart",
     "pages/profile/profile",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/coffee-detail/coffee-detail"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -25,10 +25,6 @@
       {
         "pagePath": "pages/data/data",
         "text": "数据"
-      },
-      {
-        "pagePath": "pages/tools/tools",
-        "text": "工具"
       },
       {
         "pagePath": "pages/cart/cart",
