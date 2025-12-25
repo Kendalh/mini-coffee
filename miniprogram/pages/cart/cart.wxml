@@ -1,3 +1,26 @@
-<view class="container">
-  <text>购物车页面</text>
+<view class="mp-page mp-cart">
+  <view class="mp-page__bd mp-cart__bd">
+    <view class="mp-cart__hero mp-card">
+      <view class="mp-cart__title">购物车</view>
+      <view class="mp-cart__subtitle">结算区固定在底部，信息更清晰。</view>
+    </view>
+
+    <view class="mp-card mp-cart__empty">
+      <view class="mp-cart__emptyTitle">购物车还是空的</view>
+      <view class="mp-cart__emptyDesc">去挑选一些喜欢的咖啡豆吧。</view>
+      <view class="weui-btn-area mp-cart__emptyActions">
+        <navigator class="weui-btn weui-btn_primary" open-type="switchTab" url="/pages/index/index">去逛逛</navigator>
+      </view>
+    </view>
+
+    <view class="weui-tips">提示：此页目前为 UI 结构占位，业务逻辑保持不变。</view>
+  </view>
+
+  <view class="mp-cart__footbar">
+    <view class="mp-cart__total">
+      <view class="mp-cart__totalLabel">合计</view>
+      <view class="mp-cart__totalValue">¥ 0.00</view>
+    </view>
+    <button class="weui-btn weui-btn_primary mp-cart__checkoutBtn" disabled>去结算</button>
+  </view>
 </view>

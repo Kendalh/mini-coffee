@@ -1,80 +1,81 @@
-<view class="container">
-  <view class="header">
-    <text class="title">咖啡豆数据</text>
-  </view>
-  
-  <!-- 过滤器 -->
-  <view class="filter-container">
-    <view class="filter-row">
-      <picker class="filter-picker" bindchange="onCountryChange" range="{{countryRange}}">
-        <view class="filter-label">国家: {{selectedCountryLabel || '全部'}} ({{countries.length}} 个国家)</view>
-      </picker>
-      
-      <picker class="filter-picker" bindchange="onTypeChange" range="{{typeRange}}">
-        <view class="filter-label">
-          豆类: {{selectedTypeLabel || '全部'}}
-        </view>
-      </picker>
-      
-      <picker class="filter-picker" bindchange="onFlavorChange" range="{{flavorRange}}">
-        <view class="filter-label">
-          风味: {{selectedFlavorLabel || '全部'}}
-        </view>
-      </picker>
+<view class="mp-page">
+  <view class="mp-page__bd">
+    <view class="mp-data__hero mp-card">
+      <view class="mp-data__heroTitle">咖啡豆数据</view>
+      <view class="mp-data__heroMeta">第 {{pagination.page || 1}} / {{pagination.total_pages || 1}} 页</view>
     </view>
-  </view>
-  
-  <scroll-view class="table-scroll" scroll-x="true">
-    <view class="table-container">
-      <view class="table-header">
-        <text class="table-cell name">名称</text>
-        <text class="table-cell country">国家</text>
-        <text class="table-cell flavor-category">风味分类</text>
-        <text class="table-cell origin">产地</text>
-        <text class="table-cell grade">等级</text>
-        <text class="table-cell type">类型</text>
-        <text class="table-cell price">价格(元/kg)</text>
-        <text class="table-cell status">状态</text>
-      </view>
-      
-      <view wx:if="{{loading}}" class="loading">
-        <text>加载中...</text>
-      </view>
-      
-      <view wx:else>
-        <view wx:for="{{coffeeBeans}}" wx:key="code" class="table-row" bindtap="onRowClick" data-item="{{item}}">
-          <text class="table-cell name">{{item.name}}</text>
-          <text class="table-cell country">{{item.country}}</text>
-          <text class="table-cell flavor-category">{{item.flavor_category}}</text>
-          <text class="table-cell origin">{{item.origin}}</text>
-          <text class="table-cell grade">{{item.grade}}</text>
-          <text class="table-cell type">{{item.type === 'premium' ? '精品' : '商业'}}</text>
-          <text class="table-cell price">{{item.price_per_kg ? item.price_per_kg : '暂无'}}</text>
-          <text class="table-cell status">{{item.sold_out ? '售罄' : '有货'}}</text>
-        </view>
-      </view>
-    </view>
-  </scroll-view>
-  
-  <!-- 分页控件 -->
-  <view class="pagination" wx:if="{{!loading}}">
-    <button class="page-btn" bindtap="onPrevPage" disabled="{{!pagination.has_prev}}">上一页</button>
-    
-    <view class="page-numbers">
-      <block wx:for="{{[pagination.page-2, pagination.page-1, pagination.page, pagination.page+1, pagination.page+2]}}" wx:key="index">
-        <block wx:if="{{item > 0 && item <= pagination.total_pages}}">
-          <view 
-            class="page-number {{item === pagination.page ? 'active' : ''}}" 
-            bindtap="onPageChange" 
-            data-page="{{item}}">
-            {{item}}
-          </view>
-        </block>
-      </block>
-    </view>
-    
-    <button class="page-btn" bindtap="onNextPage" disabled="{{!pagination.has_next}}">下一页</button>
-  </view>
-  
 
+    <view class="weui-cells__title">筛选（{{countries.length}} 个国家）</view>
+    <view class="weui-cells mp-filter">
+      <picker bindchange="onCountryChange" range="{{countryRange}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">国家</view>
+          <view class="weui-cell__ft">{{selectedCountryLabel || '全部'}}</view>
+        </view>
+      </picker>
+      <picker bindchange="onTypeChange" range="{{typeRange}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">豆类</view>
+          <view class="weui-cell__ft">{{selectedTypeLabel || '全部'}}</view>
+        </view>
+      </picker>
+      <picker bindchange="onFlavorChange" range="{{flavorRange}}">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">风味</view>
+          <view class="weui-cell__ft">{{selectedFlavorLabel || '全部'}}</view>
+        </view>
+      </picker>
+    </view>
+
+    <view class="weui-cells__title">列表</view>
+
+    <view wx:if="{{loading}}" class="weui-loadmore">
+      <view class="weui-loading"></view>
+      <view class="weui-loadmore__tips">加载中</view>
+    </view>
+
+    <view wx:elif="{{coffeeBeans.length === 0}}" class="weui-tips">暂无数据</view>
+
+    <view wx:else class="weui-cells">
+      <view wx:for="{{coffeeBeans}}" wx:key="code" class="weui-cell weui-cell_access mp-bean" bindtap="onRowClick" data-item="{{item}}">
+        <view class="weui-cell__bd">
+          <view class="mp-bean__title">
+            <text class="mp-bean__name">{{item.name}}</text>
+            <text class="mp-tag {{item.type === 'premium' ? 'mp-tag--premium' : 'mp-tag--common'}}">{{item.type === 'premium' ? '精品' : '商业'}}</text>
+            <text class="mp-tag {{item.sold_out ? 'mp-tag--soldout' : 'mp-tag--instock'}}">{{item.sold_out ? '售罄' : '有货'}}</text>
+          </view>
+          <view class="mp-bean__sub">
+            <text>{{item.country}}</text>
+            <text class="mp-dot">·</text>
+            <text>{{item.flavor_category}}</text>
+            <text wx:if="{{item.origin}}" class="mp-dot">·</text>
+            <text wx:if="{{item.origin}}">{{item.origin}}</text>
+          </view>
+        </view>
+        <view class="weui-cell__ft mp-bean__ft">
+          <view class="mp-bean__price">{{item.price_per_kg ? (item.price_per_kg + ' 元/kg') : '暂无价格'}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="mp-pagination mp-card" wx:if="{{!loading && pagination.total_pages && pagination.total_pages > 1}}">
+      <view class="mp-pagination__row">
+        <button class="weui-btn weui-btn_mini weui-btn_default" bindtap="onPrevPage" disabled="{{!pagination.has_prev}}">上一页</button>
+        <view class="mp-pagination__info">第 {{pagination.page}} / {{pagination.total_pages}} 页</view>
+        <button class="weui-btn weui-btn_mini weui-btn_default" bindtap="onNextPage" disabled="{{!pagination.has_next}}">下一页</button>
+      </view>
+      <view class="mp-pagination__pages">
+        <block wx:for="{{[pagination.page-2, pagination.page-1, pagination.page, pagination.page+1, pagination.page+2]}}" wx:key="index">
+          <block wx:if="{{item > 0 && item <= pagination.total_pages}}">
+            <button
+              class="weui-btn weui-btn_mini {{item === pagination.page ? 'weui-btn_primary' : 'weui-btn_default'}} mp-pagination__pageBtn"
+              bindtap="onPageChange"
+              data-page="{{item}}">
+              {{item}}
+            </button>
+          </block>
+        </block>
+      </view>
+    </view>
+  </view>
 </view>

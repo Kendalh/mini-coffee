@@ -1,105 +1,97 @@
-<view class="container">
-  <view class="header">
-    <text class="title">咖啡豆详情</text>
-  </view>
-  
-  <view class="detail-card" wx:if="{{coffeeBean}}">
-    <view class="detail-item">
-      <text class="label">名称:</text>
-      <text class="value">{{coffeeBean.name}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">国家:</text>
-      <text class="value">{{coffeeBean.country}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">产地:</text>
-      <text class="value">{{coffeeBean.origin}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">等级:</text>
-      <text class="value">{{coffeeBean.grade}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">类型:</text>
-      <text class="value">{{coffeeBean.type === 'premium' ? '精品' : '商业'}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">价格:</text>
-      <text class="value">{{coffeeBean.price_per_kg ? coffeeBean.price_per_kg + ' 元/kg' : '暂无'}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">状态:</text>
-      <text class="value">{{coffeeBean.sold_out ? '售罄' : '有货'}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">密度:</text>
-      <text class="value">{{coffeeBean.density}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">海拔:</text>
-      <text class="value">{{coffeeBean.altitude}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">风味:</text>
-      <text class="value">{{coffeeBean.flavor_profile}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">加工方式:</text>
-      <text class="value">{{coffeeBean.processing_method}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">品种:</text>
-      <text class="value">{{coffeeBean.variety}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">供应商:</text>
-      <text class="value">{{coffeeBean.provider}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">收获季节:</text>
-      <text class="value">{{coffeeBean.harvest_season}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">风味分类:</text>
-      <text class="value">{{coffeeBean.flavor_category}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">地块:</text>
-      <text class="value">{{coffeeBean.plot}}</text>
-    </view>
-    <view class="detail-item">
-      <text class="label">庄园:</text>
-      <text class="value">{{coffeeBean.estate}}</text>
-    </view>
-  </view>
-  
-  <!-- Price Trends Table -->
-  <view class="price-trends-section" wx:if="{{priceTrends.length > 0}}">
-    <view class="section-header">
-      <text class="section-title">价格趋势</text>
-    </view>
-    
-    <view class="table-container">
-      <view class="table-header">
-        <view class="table-cell header-cell">年份</view>
-        <view class="table-cell header-cell">月份</view>
-        <view class="table-cell header-cell">价格 (元/kg)</view>
+<view class="mp-page mp-detail">
+  <view class="mp-page__bd">
+    <view wx:if="{{error}}" class="weui-msg mp-detail__msg">
+      <view class="weui-msg__text-area">
+        <view class="weui-msg__title">加载失败</view>
+        <view class="weui-msg__desc">{{error}}</view>
       </view>
-      
-      <view class="table-row" wx:for="{{priceTrends}}" wx:key="index">
-        <view class="table-cell">{{item.data_year}}</view>
-        <view class="table-cell">{{item.data_month}}</view>
-        <view class="table-cell">{{item.price_per_kg}} 元/kg</view>
+      <view class="weui-msg__opr-area">
+        <view class="weui-btn-area">
+          <navigator class="weui-btn weui-btn_primary" open-type="navigateBack" delta="1">返回</navigator>
+        </view>
       </view>
     </view>
+
+    <view wx:elif="{{loading}}" class="weui-loadmore">
+      <view class="weui-loading"></view>
+      <view class="weui-loadmore__tips">加载中</view>
+    </view>
+
+    <block wx:else>
+      <view class="mp-detail__hero mp-card" wx:if="{{coffeeBean}}">
+        <view class="mp-detail__name">{{coffeeBean.name}}</view>
+        <view class="mp-detail__meta">
+          <text>{{coffeeBean.country}}</text>
+          <text class="mp-dot">·</text>
+          <text>{{coffeeBean.flavor_category}}</text>
+          <text wx:if="{{coffeeBean.origin}}" class="mp-dot">·</text>
+          <text wx:if="{{coffeeBean.origin}}">{{coffeeBean.origin}}</text>
+        </view>
+        <view class="mp-detail__priceRow">
+          <view class="mp-detail__price">{{coffeeBean.price_per_kg ? ('¥ ' + coffeeBean.price_per_kg) : '暂无价格'}}</view>
+          <text class="mp-tag {{coffeeBean.type === 'premium' ? 'mp-tag--premium' : 'mp-tag--common'}}">{{coffeeBean.type === 'premium' ? '精品' : '商业'}}</text>
+          <text class="mp-tag {{coffeeBean.sold_out ? 'mp-tag--soldout' : 'mp-tag--instock'}}">{{coffeeBean.sold_out ? '售罄' : '有货'}}</text>
+        </view>
+      </view>
+
+      <view class="weui-cells__title" wx:if="{{coffeeBean}}">基础信息</view>
+      <view class="weui-cells mp-card mp-detail__cells" wx:if="{{coffeeBean}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">等级</view>
+          <view class="weui-cell__ft">{{coffeeBean.grade || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">密度</view>
+          <view class="weui-cell__ft">{{coffeeBean.density || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">海拔</view>
+          <view class="weui-cell__ft">{{coffeeBean.altitude || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">风味</view>
+          <view class="weui-cell__ft">{{coffeeBean.flavor_profile || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">加工方式</view>
+          <view class="weui-cell__ft">{{coffeeBean.processing_method || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">品种</view>
+          <view class="weui-cell__ft">{{coffeeBean.variety || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">供应商</view>
+          <view class="weui-cell__ft">{{coffeeBean.provider || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">收获季节</view>
+          <view class="weui-cell__ft">{{coffeeBean.harvest_season || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">地块</view>
+          <view class="weui-cell__ft">{{coffeeBean.plot || '—'}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">庄园</view>
+          <view class="weui-cell__ft">{{coffeeBean.estate || '—'}}</view>
+        </view>
+      </view>
+
+      <view class="weui-cells__title" wx:if="{{priceTrends.length > 0}}">价格趋势</view>
+      <view class="weui-cells mp-card mp-detail__cells" wx:if="{{priceTrends.length > 0}}">
+        <view wx:for="{{priceTrends}}" wx:key="index" class="weui-cell">
+          <view class="weui-cell__bd">{{item.data_year}}-{{item.data_month}}</view>
+          <view class="weui-cell__ft">{{item.price_per_kg}} 元/kg</view>
+        </view>
+      </view>
+
+      <view class="weui-tips" wx:if="{{priceTrends.length === 0}}">暂无价格趋势数据</view>
+    </block>
   </view>
-  
-  <view class="loading" wx:elif="{{loading}}">
-    <text>加载中...</text>
-  </view>
-  
-  <view class="error" wx:elif="{{error}}">
-    <text>{{error}}</text>
+
+  <view class="mp-detail__bottom" wx:if="{{!loading && !error && coffeeBean}}">
+    <button class="weui-btn weui-btn_primary mp-detail__primaryBtn" disabled="{{coffeeBean.sold_out}}">{{coffeeBean.sold_out ? '已售罄' : '加入购物车'}}</button>
+    <navigator class="weui-btn weui-btn_default mp-detail__secondaryBtn" open-type="navigateBack" delta="1">返回</navigator>
   </view>
 </view>

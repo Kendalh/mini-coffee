@@ -1,4 +1,32 @@
 <!--index.wxml-->
-<view class="container">
-  <text>主页页面</text>
+<view class="mp-page">
+  <view class="mp-page__bd">
+    <view class="mp-home__hero mp-card">
+      <view class="mp-home__heroTitle">Mini Coffee</view>
+      <view class="mp-home__heroDesc">干净的 WeUI 风格界面，专注咖啡与数据。</view>
+
+      <view class="weui-btn-area mp-home__btnArea">
+        <navigator class="weui-btn weui-btn_primary" open-type="switchTab" url="/pages/data/data">查看数据</navigator>
+        <navigator class="weui-btn weui-btn_default" open-type="switchTab" url="/pages/cart/cart">打开购物车</navigator>
+      </view>
+    </view>
+
+    <view class="weui-cells__title">快捷入口</view>
+    <view class="weui-cells">
+      <navigator class="weui-cell weui-cell_access" open-type="switchTab" url="/pages/data/data">
+        <view class="weui-cell__bd">数据</view>
+        <view class="weui-cell__ft"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" open-type="switchTab" url="/pages/cart/cart">
+        <view class="weui-cell__bd">购物车</view>
+        <view class="weui-cell__ft"></view>
+      </navigator>
+      <navigator class="weui-cell weui-cell_access" open-type="switchTab" url="/pages/profile/profile">
+        <view class="weui-cell__bd">我的</view>
+        <view class="weui-cell__ft"></view>
+      </navigator>
+    </view>
+
+    <view class="weui-tips">提示：本次改造仅调整 UI，不改业务逻辑。</view>
+  </view>
 </view>
